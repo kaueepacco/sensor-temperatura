@@ -1,1 +1,202 @@
-
+[
+    {
+        "id": "164d2962ab911be5",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ea0bdea91a4ba97e",
+        "type": "mqtt in",
+        "z": "164d2962ab911be5",
+        "name": "",
+        "topic": "atv/topic",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "5aa0f083ab346b8c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 180,
+        "y": 120,
+        "wires": [
+            [
+                "4ed9bccff5ebd98a",
+                "862362b8430b6e42",
+                "0f89940e2407bace"
+            ]
+        ]
+    },
+    {
+        "id": "862362b8430b6e42",
+        "type": "function",
+        "z": "164d2962ab911be5",
+        "name": "function 1",
+        "func": "msg.payload = \"A temperatura do sensor é: \" + msg.payload.temper;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 480,
+        "y": 120,
+        "wires": [
+            [
+                "6b0b31424cd43920",
+                "0bb6ee103f3b9944"
+            ]
+        ]
+    },
+    {
+        "id": "4ed9bccff5ebd98a",
+        "type": "debug",
+        "z": "164d2962ab911be5",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "6b0b31424cd43920",
+        "type": "node-red-contrib-whatsapp-cmb-send-message",
+        "z": "164d2962ab911be5",
+        "name": "",
+        "account": "c5a53356d99cdc9d",
+        "text": "payload",
+        "inputtypemessage": "msg",
+        "rejectssl": false,
+        "x": 680,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0bb6ee103f3b9944",
+        "type": "debug",
+        "z": "164d2962ab911be5",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "3f2432b72c51ea15",
+        "type": "influxdb out",
+        "z": "164d2962ab911be5",
+        "influxdb": "e778bec9759ee680",
+        "name": "influxdb",
+        "measurement": "temper",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "moisesalmir910@gmail.com",
+        "bucket": "moibucket",
+        "x": 460,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "0f89940e2407bace",
+        "type": "function",
+        "z": "164d2962ab911be5",
+        "name": "function 2",
+        "func": "msg.payload = 10;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 220,
+        "wires": [
+            [
+                "3f2432b72c51ea15",
+                "a589c77c87a9c3d7"
+            ]
+        ]
+    },
+    {
+        "id": "a589c77c87a9c3d7",
+        "type": "debug",
+        "z": "164d2962ab911be5",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "5aa0f083ab346b8c",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "c5a53356d99cdc9d",
+        "type": "node-red-contrib-whatsapp-cmb-account",
+        "name": ""
+    },
+    {
+        "id": "e778bec9759ee680",
+        "type": "influxdb",
+        "hostname": "https://us-east-1-1.aws.cloud2.influxdata.com",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "https://us-east-1-1.aws.cloud2.influxdata.com",
+        "rejectUnauthorized": true
+    }
+]
