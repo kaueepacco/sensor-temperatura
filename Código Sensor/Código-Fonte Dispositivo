@@ -1,0 +1,56 @@
+// Bibliotecas
+#include <DHTesp.h>
+#include <EspMQTTClient.h>
+#include <ArduinoJson.h>
+
+// Constantes
+const int DHT_PIN = 15;
+const char SSIDName[] = "Wokwi-GUEST";
+const char SSIDPass[] = "";
+const char BrokerURL[] = "broker.hivemq.com";
+const char BrokerUserName[] = "";
+const char BrokerPassword[] = "";
+const char MQTTClientName[] = "Temps";
+const int BrokerPort = 1883;
+const String TopicoPrefixo = "atv";
+const String Topico_Temperature = TopicoPrefixo+"/topic";
+const int JSON_BUFFER_SIZE = JSON_OBJECT_SIZE(1) + 20;
+
+// Variáveis globais
+DHTesp dhtSensor;
+EspMQTTClient clienteMQTT(SSIDName, SSIDPass, BrokerURL, BrokerUserName, BrokerPassword, MQTTClientName, BrokerPort);
+StaticJsonDocument<JSON_BUFFER_SIZE> jsonBuffer;
+JsonObject jsonPayload = jsonBuffer.to<JsonObject>();
+
+// Serialize the JSON object to a string
+String jsonString;
+
+void onConnectionEstablished() {}
+
+// Setup
+void setup() {
+  Serial.begin(9600);
+  dhtSensor.setup(DHT_PIN, DHTesp::DHT22);
+  clienteMQTT.enableDebuggingMessages();
+}
+
+// Loop
+void loop() {
+  clienteMQTT.loop();
+
+  if (clienteMQTT.isMqttConnected() == 1) {
+    float temper = dhtSensor.getTemperature();
+
+    Serial.println("Temp: " + String(temper, 2) + "°C");
+    Serial.println("-");
+
+    jsonPayload["temper"] = temper;
+
+    String jsonString;
+    serializeJson(jsonPayload, jsonString);
+  
+    clienteMQTT.publish(Topico_Temperature, jsonString.c_str()); 
+  }
+
+  delay(7500);
+}
